@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package shopping;
+
+// The item representation
+message Item {
+  int32 id = 1;
+  string name = 2;
+  string category = 3;
+  double price = 4;
+  string description = 5;
+  int32 quantity = 6;
+  float rating = 7;
+  string seller_addr = 8; 
+  string seller_id = 9;// This could be an address or a unique seller identifier
+}
+
+// The request message for registering a seller
+message SellerRegisterRequest {
+  string uuid = 1;
+}
+
+// The request message for adding an item
+message AddItemRequest {
+  Item item = 1;
+  string uuid = 2;
+}
+
+// The request message for updating an item
+message UpdateItemRequest {
+  Item item = 1;
+}
+
+// The request message for deleting an item
+message ItemDeleteRequest {
+  int32 id = 1;
+  string seller_uuid = 2;
+}
+
+// The request message for listing items by a seller
+message ListItemsRequest {
+  string seller_uuid = 1;
+}
+
+message SearchItemsRequest {
+  string name = 1;
+  string category = 2;
+}
+
+// The request message for buying an item
+message BuyItemRequest {
+  int32 id = 1;
+  int32 quantity = 2;
+  string buyer_addr = 3;
+}
+
+// The request message for adding an item to the wishlist
+message WishListRequest {
+  int32 id = 1;
+  string buyer_addr = 2;
+}
+
+// The request message for rating an item
+message RateItemRequest {
+  int32 id = 1;
+  int32 rating = 2;
+}
+
+
+// ---------------------------------------------------------------------------------------------------
+
+// Response
+message OperationResponse {
+  string message = 1;
+}
+
+message AddItemResponse {
+  string message = 1;
+  int32 id = 2; // Use string type for UUID
+}
+
+message  SellerRegisterResponse {
+  bool success = 1;
+  string message = 2;
+  string uuid = 3; // Use string type for UUID
+}
+
+// The response message for item search
+message SearchItemsResponse {
+  string message = 1;
+  repeated Item items = 2;  
+}
+
+// The service definition for the market
+service Market {
+  rpc RegisterSeller(SellerRegisterRequest) returns (SellerRegisterResponse);
+  rpc AddItem(AddItemRequest) returns (AddItemResponse);
+  rpc UpdateItem(UpdateItemRequest) returns (OperationResponse);
+  rpc DeleteItem(ItemDeleteRequest) returns (OperationResponse);
+  rpc ListItems(ListItemsRequest) returns (SearchItemsResponse);
+  rpc SearchItems(SearchItemsRequest) returns (SearchItemsResponse);
+  rpc BuyItem(BuyItemRequest) returns (OperationResponse);
+  rpc AddToWishList(WishListRequest) returns (OperationResponse);
+  rpc RateItem(RateItemRequest) returns (OperationResponse);
+  
+}

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package marketplace;
+
+
+// The message containing notification details
+message Notification {
+  string message = 1; // The notification message content
+}
+
+// The acknowledgment message for a notification
+message NotificationAck {
+  bool success = 1; // Whether the notification was successfully received
+  string message = 2; // Optional response message, e.g., for error details
+}
+
+
+
+service BuyerNotifications {
+  // Sends a notification to a buyer
+  rpc ReceiveNotification(Notification) returns (NotificationAck) {}
+}
+
+service SellerNotifications {
+  // Sends a notification to a seller
+  rpc ReceiveNotification(Notification) returns (NotificationAck) {}
+}
+
+
+
+
